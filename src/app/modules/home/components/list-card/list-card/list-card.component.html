@@ -1,0 +1,13 @@
+<ng-container *ngFor="let item of allItems">
+    <div *ngIf="item.status === list.toLowerCase()" 
+         class="drag-item m-2 bg-primary d-flex flex-column p-1 d-flex justify-content-between"
+         draggable="true" 
+         (dragOver)="onDragOver($event)"
+         (dragstart)="onDragStart($event, item)"
+         id="drag1">
+        <div class="cross-icon" (click)="deleteCard(item.id)">x</div>
+        <div>{{item?.title}}</div>
+        <div class="f12">{{item?.description}}</div>
+        <div class="f12">share <i class="fa fa-share-alt icon clickable"></i></div>
+    </div>
+</ng-container>

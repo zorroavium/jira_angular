@@ -1,0 +1,91 @@
+<div class="container w-100 d-flex flex-column">
+    <div class="header d-flex justify-content-center m-1">
+        <h2>Jira Board(Vetty Assignment)</h2>
+    </div>
+    <div class="toolbar d-flex justify-content-end m-2">
+        <button class="btn btn-primary" (click)="open(contentList)">ADD LIST</button>
+    </div>
+    <div class="body d-flex flex-row">
+        <ng-container *ngFor="let list of jiraLists; let i = index">
+            <div class="d-flex flex-column bd-highlight mb-3 list-container d-flex flex-column" id="list{{i}}">
+                <div class="p-2 bd-highlight first_row d-flex justify-content-between">
+                    <div><strong>{{list}}</strong></div>
+                    <div class="cross btn btn-cross rounded-circle clickable" (click)="deleteList(i, list)">x</div>
+                </div>
+                <div 
+                    class="second-row p-2 bd-highlight" 
+                    (drop)="drop($event, list)" 
+                    (dragover)="allowDrop($event)">
+                    
+                    <app-list-card 
+                    [listNumber]="i" 
+                    [list]="list" 
+                    [allItems]="jiraListCards"
+                    (deleteEvent)="onDeleteEvent($event)"
+                    ></app-list-card>
+                </div>
+                <div class="p-2 bd-highlight list-body">
+                    <button class="btn btn-primary rounded-circle" (click)="initFormModel(i); open(content)"><i class="fa fa-plus"></i></button>
+                </div>
+              </div>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #contentList let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add New List</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="newJiraList">Header</label>
+          <input type="text" [(ngModel)]="newJiraList" class="form-control" id="newJiraList" name="newJiraList" placeholder="Enter header">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer-custom m-2">
+      <button type="button" class="btn btn-primary" (click)="modal.close('Save click'); saveNewList()">Save</button>
+    </div>
+  </ng-template>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add New Task</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="header">Header</label>
+          <input type="text" [(ngModel)]="formModal.title" class="form-control" id="header" name="header" placeholder="Enter header">
+        </div>
+        <div class="form-group">
+          <label for="desc">Description</label>
+          <input type="text" [(ngModel)]="formModal.description" class="form-control" id="desc" name="desc" placeholder="Enter description">
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select [(ngModel)]="formModal.status" name="status" class="form-control" disabled>
+                <option *ngFor="let list of jiraLists; let i = index" value="{{i}}">{{list}}</option>
+              </select>
+        </div>
+        <div class="form-group">
+          <label for="priority">Priority</label>
+          <input type="text" [(ngModel)]="formModal.priority" class="form-control" id="priority" name="priority" placeholder="Enter priority">
+        </div>
+        <div class="form-group">
+          <label for="estimate">Estimate</label>
+          <input type="text" [(ngModel)]="formModal.estimate" class="form-control" id="estimate" name="estimate" placeholder="Enter estimate">
+        </div>
+        <div class="form-group">
+          <label for="storyPoints">Story Points</label>
+          <input type="text" [(ngModel)]="formModal.storyPoints" class="form-control" id="storyPoints" name="storyPoints" placeholder="Enter story points">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer-custom m-2">
+      <button type="button" class="btn btn-primary" (click)="modal.close('Save click'); save()">Save</button>
+    </div>
+  </ng-template>
